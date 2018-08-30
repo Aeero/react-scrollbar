@@ -17,10 +17,15 @@ class Scrollbar extends PureComponent {
         scrollWidth: 0,
         clientHeight: 0,
         scrollHeight: 0
+      },
+      contentPosition: {
+        scrollLeft: 0,
+        scrollTop: 0
       }
     };
 
     this.setContentSize = this.setContentSize.bind(this);
+    this.setContentPosition = this.setContentPosition.bind(this);
   }
 
   // 设置容器的实际宽高
@@ -30,27 +35,38 @@ class Scrollbar extends PureComponent {
     });
   }
 
+  // 设置滚动偏移量
+  setContentPosition(pos) {
+    this.setState({
+      contentPosition: pos
+    });
+  }
+
   render() {
     const {
       children
     } = this.props;
 
     const {
-      contentSize
+      contentSize,
+      contentPosition
     } = this.state;
 
     return (
       <div className="react-scrollbar-simulation" style={{width:'300px', height:'300px'}}>
         <ScrollbarContent
           setContentSize={this.setContentSize}
+          setContentPosition={this.setContentPosition}
         >
         {children}
         </ScrollbarContent>
         <ScrollbarTrackVertical
           contentSize={contentSize}
+          contentPosition={contentPosition}
         />
         <ScrollbarTrackHorizontal
           contentSize={contentSize}
+          contentPosition={contentPosition}
         />
       </div>
     )
@@ -58,7 +74,6 @@ class Scrollbar extends PureComponent {
 }
 
 Scrollbar.propTypes = {
-  className: PropTypes.string,
 }
 
 export default Scrollbar;

@@ -32,7 +32,10 @@ class ScrollbarContent extends PureComponent {
 
   // 滚动事件
   scroll(event) {
-    console.log(this.dom.scrollTop, this.dom.scrollLeft);
+    this.props.setContentPosition({
+      scrollTop: this.dom.scrollTop,
+      scrollLeft: this.dom.scrollLeft
+    });
   }
 
   // 获取容器宽高
@@ -65,7 +68,8 @@ class ScrollbarContent extends PureComponent {
 }
 
 ScrollbarContent.propTypes = {
-  setContentSize: PropTypes.func.isRequired
+  setContentSize: PropTypes.func.isRequired,
+  setContentPosition: PropTypes.func.isRequired
 }
 
 export default ScrollbarContent;
