@@ -5,7 +5,10 @@ import ScrollbarContent from './content';
 import ScrollbarTrackVertical from './bar/vertical';
 import ScrollbarTrackHorizontal from './bar/horizontal';
 
+import ScrollInterface from './scrollInterface';
+
 import './index.css';
+
 
 class Scrollbar extends PureComponent {
   constructor() {
@@ -17,28 +20,18 @@ class Scrollbar extends PureComponent {
         scrollWidth: 0,
         clientHeight: 0,
         scrollHeight: 0
-      },
-      contentPosition: {
-        scrollLeft: 0,
-        scrollTop: 0
       }
     };
 
+    this.scrollInterface = new ScrollInterface();
+
     this.setContentSize = this.setContentSize.bind(this);
-    this.setContentPosition = this.setContentPosition.bind(this);
   }
 
   // 设置容器的实际宽高
   setContentSize(size) {
     this.setState({
       contentSize: size
-    });
-  }
-
-  // 设置滚动偏移量
-  setContentPosition(pos) {
-    this.setState({
-      contentPosition: pos
     });
   }
 
@@ -56,17 +49,17 @@ class Scrollbar extends PureComponent {
       <div className="react-scrollbar-simulation" style={{width:'300px', height:'300px'}}>
         <ScrollbarContent
           setContentSize={this.setContentSize}
-          setContentPosition={this.setContentPosition}
+          scrollInterface={this.scrollInterface}
         >
         {children}
         </ScrollbarContent>
         <ScrollbarTrackVertical
           contentSize={contentSize}
-          contentPosition={contentPosition}
+          scrollInterface={this.scrollInterface}
         />
         <ScrollbarTrackHorizontal
           contentSize={contentSize}
-          contentPosition={contentPosition}
+          scrollInterface={this.scrollInterface}
         />
       </div>
     )

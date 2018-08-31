@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
+import scrollInterface from './scrollInterface';
+
 import {
   scrollbarWidth
 } from '../utils/scroll';
+import ScrollInterface from './scrollInterface';
 
 const scrollContentBoxStyle = {
   marginRight: `${-scrollbarWidth}px`,
@@ -18,24 +21,12 @@ class ScrollbarContent extends PureComponent {
 
     this.dom = null;
 
-    this.scroll = this.scroll.bind(this);
     this.getContainerSize = this.getContainerSize.bind(this);
   }
 
   componentDidMount() {
-    this.dom.addEventListener('scroll', this.scroll);
     this.props.setContentSize(this.getContainerSize());
-  }
-  componentWillUnmount() {
-    this.dom.removeEventListener('scroll', this.scroll);
-  }
-
-  // 滚动事件
-  scroll(event) {
-    this.props.setContentPosition({
-      scrollTop: this.dom.scrollTop,
-      scrollLeft: this.dom.scrollLeft
-    });
+    this.props.scrollInterface.init(this.dom);
   }
 
   // 获取容器宽高
@@ -69,7 +60,7 @@ class ScrollbarContent extends PureComponent {
 
 ScrollbarContent.propTypes = {
   setContentSize: PropTypes.func.isRequired,
-  setContentPosition: PropTypes.func.isRequired
+  scrollInterface: PropTypes.instanceOf(ScrollInterface)
 }
 
 export default ScrollbarContent;

@@ -1,24 +1,36 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
+import ScrollInterface from '../scrollInterface';
+import { calculateScrollPos, calculatePagePos } from '../../utils/calculateScrollPos';
+
 import './index.css';
 
 function createScrollbarTrack(WrapComponent) {
   class BaseScrollbarTrack extends PureComponent {
-    constructor() {
+    constructor(props) {
       super();
 
       this.state = {
-        isHover: false
+        isHover: false,
+        scrollTop: props.scrollInterface.scrollTop,
+        scrollLeft: props.scrollInterface.scrollLeft
       };
 
+      // 滑块dom节点
       this.slider = null;
+      // 鼠标的位置
+      this.clientX = 0;
+      this.clientY = 0;
 
+      this.scrollCallback = this.scrollCallback.bind(this);
+      this.setScroll = this.setScroll.bind(this);
       this.setSlider = this.setSlider.bind(this);
       this.handleMouseEnter = this.handleMouseEnter.bind(this);
       this.handleMouseLeave = this.handleMouseLeave.bind(this);
       this.handleMouseDown = this.handleMouseDown.bind(this);
       this.handleMouseUp = this.handleMouseUp.bind(this);
+      this.handleMouseMove = this.handleMouseMove.bind(this);
       this.calculateVerticalBarPos = this.calculateVerticalBarPos.bind(this);
       this.calculateHorizontalBarPos = this.calculateHorizontalBarPos.bind(this);
     }
@@ -27,6 +39,8 @@ function createScrollbarTrack(WrapComponent) {
       this.slider.addEventListener('mouseenter', this.handleMouseEnter);
       this.slider.addEventListener('mouseleave', this.handleMouseLeave);
       this.slider.addEventListener('mousedown', this.handleMouseDown);
+
+      this.props.scrollInterface.addCallback(this.scrollCallback);
     }
 
     componentWillUnmount() {
@@ -35,18 +49,31 @@ function createScrollbarTrack(WrapComponent) {
       this.slider.removeEventListener('mousedown', this.handleMouseDown);
     }
 
-    // addEvents() {
-      
-    // }
-    // removerEvents() {
-      
-    // }
+    // 滚动回调
+    scrollCallback({ scrollTop, scrollLeft }) {
+      this.setState({
+        scrollTop,
+        scrollLeft
+      });
+    }
+
+    // 设置滚动距离
+    setScroll(top, left) {
+      this.props.scrollInterface.setScroll(top, left);
+    }
+
 
     // 获取滑块的ref
     setSlider(dom) {
       this.slider = dom;
     }
-    // 
+
+    // 设置鼠标的位置
+    setMousePos(event = {}) {
+      const { clientX, clientY } = event;
+      this.clientX = clientX;
+      this.clientY = clientY;
+    }
     handleMouseEnter() {
       this.setState({
         isHover: true
@@ -57,45 +84,69 @@ function createScrollbarTrack(WrapComponent) {
         isHover: false
       });
     }
-    handleMouseDown() {
+    handleMouseDown(event) {
+      // event.stopImmediatePropagation();
       document.addEventListener('mousemove', this.handleMouseMove);
       document.addEventListener('mouseup', this.handleMouseUp);
+      document.onselectstart = function() {return false};
+      this.setMousePos(event);
     }
     handleMouseUp() {
       document.removeEventListener('mousemove', this.handleMouseMove);
+      document.onselectstart = undefined;
+      this.setMousePos();
     }
     handleMouseMove(event) {
       const {
-        clientX,
-        clientY
+        clientX: newClientX,
+        clientY: newClientY
       } = event;
 
-      console.log(clientX, clientY);
+      const {
+        clientX: oldClientX,
+        clientY: oldClientY
+      } = this;
+
+      const {
+        clientHeight,
+        scrollHeight,
+        clientWidth,
+        scrollWidth
+      } = this.props.contentSize;
+
+      const { scrollTop, scrollLeft } = this.state;
+
+      const { pagePos } = calculatePagePos(clientHeight, scrollHeight, scrollTop, newClientY - oldClientY);
+
+      this.setScroll(pagePos, null);
+
+      // console.log(newClientX - oldClientX, newClientY - oldClientY);
+
+
+
+      this.setMousePos({
+        clientX: newClientX,
+        clientY: newClientY
+      });
     }
 
     // 计算纵向滚动条的位置
     calculateVerticalBarPos() {
       const {
         clientHeight,
-        scrollHeight,
-        scrollTop
-      } = {
-        ...this.props.contentSize,
-        ...this.props.contentPosition
-      };
+        scrollHeight
+      } = this.props.contentSize;
 
-      // 滚动条的高度
-      const scrollbarHeight = clientHeight / scrollHeight * clientHeight;
-      // 滚动条可滚动的高度
-      const scrollbarMaxScrollHeight = clientHeight - scrollbarHeight;
-      // 内容区域可滚动的高度
-      const contentMaxScrollHeight = scrollHeight - clientHeight;
-      // 滚动条的位置
-      const scrollbarTop = scrollTop / contentMaxScrollHeight * scrollbarMaxScrollHeight;
+      const { scrollTop } = this.state;
+
+      const {
+        scrollbarSize,
+        scrollbarPos
+      } = calculateScrollPos(clientHeight, scrollHeight, scrollTop);
 
       return {
-        scrollbarHeight,
-        scrollbarTop
+        scrollbarHeight: scrollbarSize,
+        scrollbarTop: scrollbarPos
       };
     }
 
@@ -103,25 +154,19 @@ function createScrollbarTrack(WrapComponent) {
     calculateHorizontalBarPos() {
       const {
         clientWidth,
-        scrollWidth,
-        scrollLeft
-      } = {
-        ...this.props.contentSize,
-        ...this.props.contentPosition
-      };
+        scrollWidth
+      } = this.props.contentSize;
 
-      // 滚动条的宽度
-      const scrollbarWidth = clientWidth / scrollWidth * clientWidth;
-      // 滚动条可滚动的宽度
-      const scrollbarMaxScrollWidth = clientWidth - scrollbarWidth;
-      // 内容区域可滚动的宽度
-      const contentMaxScrollWidth = scrollWidth - clientWidth;
-      // 滚动条的位置
-      const scrollbarLeft = scrollLeft / contentMaxScrollWidth * scrollbarMaxScrollWidth;
+      const { scrollLeft } = this.state;
+
+      const {
+        scrollbarSize,
+        scrollbarPos
+      } = calculateScrollPos(clientWidth, scrollWidth, scrollLeft);
 
       return {
-        scrollbarWidth,
-        scrollbarLeft
+        scrollbarWidth: scrollbarSize,
+        scrollbarLeft: scrollbarPos
       };
     }
 
@@ -149,10 +194,7 @@ function createScrollbarTrack(WrapComponent) {
       scrollWidth: PropTypes.number,
       scrollHeight: PropTypes.number
     }).isRequired,
-    contentPosition: PropTypes.shape({
-      scrollTop: PropTypes.number,
-      scrollLeft: PropTypes.number
-    }).isRequired
+    scrollInterface: PropTypes.instanceOf(ScrollInterface)
   }
 
   return BaseScrollbarTrack;
