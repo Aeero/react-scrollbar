@@ -9,10 +9,12 @@ import {
 import ScrollInterface from './scrollInterface';
 
 const scrollContentBoxStyle = {
+  width: `calc(100% + ${scrollbarWidth}px)`,
+  height: `calc(100% + ${scrollbarWidth}px)`,
   marginRight: `${-scrollbarWidth}px`,
   marginBottom: `${-scrollbarWidth}px`,
-  paddingRight: `${scrollbarWidth}px`,
-  paddingBottom: `${scrollbarWidth}px`
+  // paddingRight: `${scrollbarWidth}px`,
+  // paddingBottom: `${scrollbarWidth}px`
 };
 
 class ScrollbarContent extends PureComponent {
