@@ -18,7 +18,7 @@ class ScrollbarTrackVertical extends PureComponent {
       scrollbarHeight,
       scrollbarTop,
       setSlider
-    } = this.props;   
+    } = this.props;
 
     return (
       <div className="react-scrollbar-simulation-track-vertical">
@@ -45,4 +45,4 @@ ScrollbarTrackVertical.propTypes = {
   setSlider: PropTypes.func.isRequired
 }
 
-export default createTrack(ScrollbarTrackVertical);
+export default createTrack(ScrollbarTrackVertical, 'vertical');

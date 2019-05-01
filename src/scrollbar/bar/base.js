@@ -6,7 +6,13 @@ import { calculateScrollPos, calculatePagePos } from '../../utils/calculateScrol
 
 import './index.css';
 
-function createScrollbarTrack(WrapComponent) {
+/**
+* 高阶组件
+* @params {react component} WrapComponent - 滚动条view组件
+* @params {string} hOrV - 水平或垂直
+* @params {react component}
+**/
+function createScrollbarTrack(WrapComponent, hOrV) {
   class BaseScrollbarTrack extends PureComponent {
     constructor(props) {
       super();
@@ -47,6 +53,8 @@ function createScrollbarTrack(WrapComponent) {
       this.slider.removeEventListener('mouseenter', this.handleMouseEnter);
       this.slider.removeEventListener('mouseleave', this.handleMouseLeave);
       this.slider.removeEventListener('mousedown', this.handleMouseDown);
+
+      this.props.scrollInterface.removeCallback(this.scrollCallback);
     }
 
     // 滚动回调
@@ -116,12 +124,10 @@ function createScrollbarTrack(WrapComponent) {
 
       const { scrollTop, scrollLeft } = this.state;
 
-      const { pagePos } = calculatePagePos(clientHeight, scrollHeight, scrollTop, newClientY - oldClientY);
+      const pagePosTop = hOrV === 'vertical' ? calculatePagePos(clientHeight, scrollHeight, scrollTop, newClientY - oldClientY).pagePos : null;
+      const pagePosLeft = hOrV === 'horizontal' ? calculatePagePos(clientWidth, scrollWidth, scrollLeft, newClientX - oldClientX).pagePos : null;
 
-      this.setScroll(pagePos, null);
-
-      // console.log(newClientX - oldClientX, newClientY - oldClientY);
-
+      this.setScroll(pagePosTop, pagePosLeft);
 
 
       this.setMousePos({
@@ -172,6 +178,8 @@ function createScrollbarTrack(WrapComponent) {
 
 
     render() {
+      console.log('scrollbar render');
+
       const {
         isHover
       } = this.state;

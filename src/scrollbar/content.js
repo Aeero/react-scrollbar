@@ -6,6 +6,7 @@ import scrollInterface from './scrollInterface';
 import {
   scrollbarWidth
 } from '../utils/scroll';
+
 import ScrollInterface from './scrollInterface';
 
 const scrollContentBoxStyle = {

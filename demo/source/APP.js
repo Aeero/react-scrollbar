@@ -18,8 +18,8 @@ export default class extends Component {
         </header>
         <div className="content">
           <Scrollbar>
-            <div>
-              klsdf<br />
+            <div style={{padding: '10px', wordBreak: 'break-all', width: '900px'}}>
+              开始开始开始开始开始开始开始开始开始开始<br />
               scrollbarfas<br />
               defaultsd<br />
               f<br />
@@ -225,7 +225,7 @@ export default class extends Component {
               f<br />
               scrollbar<br />
               scrollbarfass<br />
-            defaulte
+              结束结束结束结束结束结束结束结束结束结束结束结束结束结束结束
             </div>
           </Scrollbar>
         </div>

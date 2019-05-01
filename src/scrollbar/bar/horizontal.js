@@ -45,4 +45,4 @@ ScrollbarTrackHorizontal.propTypes = {
   setSlider: PropTypes.func.isRequired
 }
 
-export default createTrack(ScrollbarTrackHorizontal);
+export default createTrack(ScrollbarTrackHorizontal, 'horizontal');

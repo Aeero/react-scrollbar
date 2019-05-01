@@ -16,6 +16,14 @@ class ScrollInterface {
     this.callbackFns.push(fn);
   }
 
+  removeCallback(fn) {
+    const index = this.callbackFns.indexOf(fn);
+
+    if (index >= 0) {
+      this.callbackFns.splice(index, 1);
+    }
+  }
+
   init(dom) {
     // error(
     //   !(dom instanceof Element),
