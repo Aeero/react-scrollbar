@@ -1,4 +1,5 @@
 .react-scrollbar-simulation-track-horizontal {
+  opacity: 0;
   position: absolute;
   height: 8px;
   width: 100%;
@@ -6,7 +7,7 @@
   bottom: 0px;
   left: 0;
   background: rgba(222, 222, 222, 0.6);
-  transition: opacity 0.5s 0.5s ease-out;
+  transition: opacity 0.5s 0.1s ease-out;
 }
 
 .react-scrollbar-simulation-track-horizontal-slide {
@@ -24,6 +25,7 @@
 }
 
 .react-scrollbar-simulation-track-vertical {
+  opacity: 0;
   position: absolute;
   width: 8px;
   height: 100%;
@@ -31,7 +33,7 @@
   top: 0;
   right: 0px;
   background: rgba(222, 222, 222, 0.6);
-  transition: opacity 0.5s 0.5s ease-out;
+  transition: opacity 0.5s 0.1s ease-out;
 }
 
 .react-scrollbar-simulation-track-vertical-slide {
@@ -46,4 +48,12 @@
 
 .react-scrollbar-simulation-track-vertical-slide-hover {
   background-color: rgba(50, 50, 50, 0.6);
+}
+
+.react-scrollbar-simulation-hidden {
+  display: none;
+}
+
+.react-scrollbar-simulation-op {
+  opacity: 1;
 }

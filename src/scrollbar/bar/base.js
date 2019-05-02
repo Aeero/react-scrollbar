@@ -18,16 +18,24 @@ function createScrollbarTrack(WrapComponent, hOrV) {
       super();
 
       this.state = {
-        isHover: false,
+        // 滑块是否被悬浮
+        sliderIsHover: false,
+        // 轨道是否显示
+        trackIsShow: false,
         scrollTop: props.scrollInterface.scrollTop,
         scrollLeft: props.scrollInterface.scrollLeft
       };
 
+      // 滑块轨道dom节点
+      this.sliderTrack = null;
       // 滑块dom节点
       this.slider = null;
       // 鼠标的位置
       this.clientX = 0;
       this.clientY = 0;
+
+      // 滑块轨道显示的定时器
+      this.sliderTrackTimer = null;
 
       // 强制更新
       this.componentForceUpdate = this.forceUpdate.bind(this);
@@ -39,12 +47,14 @@ function createScrollbarTrack(WrapComponent, hOrV) {
     }
 
     componentDidMount() {
+      this.sliderTrack.addEventListener('mousemove', this.setTrack);
       this.slider.addEventListener('mouseenter', this.handleMouseEnter);
       this.slider.addEventListener('mouseleave', this.handleMouseLeave);
       this.slider.addEventListener('mousedown', this.handleMouseDown);
     }
 
     componentWillUnmount() {
+      this.sliderTrack.addEventListener('mousemove', this.setTrack);
       this.slider.removeEventListener('mouseenter', this.handleMouseEnter);
       this.slider.removeEventListener('mouseleave', this.handleMouseLeave);
       this.slider.removeEventListener('mousedown', this.handleMouseDown);
@@ -55,6 +65,8 @@ function createScrollbarTrack(WrapComponent, hOrV) {
 
     // 滚动回调
     scrollCallback = ({ scrollTop, scrollLeft }) => {
+      this.setTrack();
+
       this.setState({
         scrollTop,
         scrollLeft
@@ -66,6 +78,10 @@ function createScrollbarTrack(WrapComponent, hOrV) {
       this.props.scrollInterface.setScroll(top, left);
     }
 
+    // 获取滑块轨道的ref
+    setSliderTrack = (dom) => {
+      this.sliderTrack = dom;
+    }
 
     // 获取滑块的ref
     setSlider = (dom) => {
@@ -78,14 +94,33 @@ function createScrollbarTrack(WrapComponent, hOrV) {
       this.clientX = clientX;
       this.clientY = clientY;
     }
+
+    // 显示轨道
+    setTrack = () => {
+      if (!this.state.trackIsShow) {
+        this.setState({
+          trackIsShow: true
+        });
+      }
+
+      clearTimeout(this.sliderTrackTimer);
+
+      this.sliderTrackTimer = setTimeout(() => {
+        this.setState({
+          trackIsShow: false
+        });
+      }, 1300);
+    }
+
+    // 滑块鼠标进入事件
     handleMouseEnter = () => {
       this.setState({
-        isHover: true
+        sliderIsHover: true
       });
     }
     handleMouseLeave = () => {
       this.setState({
-        isHover: false
+        sliderIsHover: false
       });
     }
     handleMouseDown = (event) => {
@@ -177,7 +212,8 @@ function createScrollbarTrack(WrapComponent, hOrV) {
       console.log('scrollbar render');
 
       const {
-        isHover
+        sliderIsHover,
+        trackIsShow
       } = this.state;
 
       const contentSize = this.props.scrollInterface.getScrollBoxSize();
@@ -193,8 +229,10 @@ function createScrollbarTrack(WrapComponent, hOrV) {
           {...this.calculateVerticalBarPos()}
           widthIsOverflow={widthIsOverflow}
           heightIsOverflow={heightIsOverflow}
-          isHover={isHover}
+          sliderIsHover={sliderIsHover}
+          trackIsShow={trackIsShow}
           setSlider={this.setSlider}
+          setSliderTrack={this.setSliderTrack}
         />
       )
     }

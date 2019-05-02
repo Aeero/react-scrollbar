@@ -14,20 +14,26 @@ class ScrollbarTrackHorizontal extends PureComponent {
   }
   render() {
     const {
-      isHover,
+      sliderIsHover,
+      trackIsShow,
       scrollbarWidth,
       scrollbarLeft,
       setSlider,
+      setSliderTrack,
       widthIsOverflow
     } = this.props;
 
     return (
-      <div className="react-scrollbar-simulation-track-horizontal" style={{display: widthIsOverflow ? '' : 'none'}}>
+      <div ref={setSliderTrack} className={classNameFormat({
+        'react-scrollbar-simulation-track-horizontal': true,
+        'react-scrollbar-simulation-hidden': !widthIsOverflow,
+        'react-scrollbar-simulation-op': trackIsShow
+      })}>
         <div
           ref={setSlider}
           className={classNameFormat({
             'react-scrollbar-simulation-track-horizontal-slide': true,
-            'react-scrollbar-simulation-track-horizontal-slide-hover': isHover,
+            'react-scrollbar-simulation-track-horizontal-slide-hover': sliderIsHover,
           })}
           style={{
             width: `${scrollbarWidth}px`,
@@ -40,7 +46,8 @@ class ScrollbarTrackHorizontal extends PureComponent {
 }
 
 ScrollbarTrackHorizontal.propTypes = {
-  isHover: PropTypes.bool,
+  sliderIsHover: PropTypes.bool,
+  trackIsShow: PropTypes.bool,
   scrollbarWidth: PropTypes.number.isRequired,
   scrollbarLeft: PropTypes.number.isRequired,
   setSlider: PropTypes.func.isRequired,
