@@ -9,3 +9,7 @@
   overflow: scroll;
   box-sizing: content-box
 }
+
+.react-scrollbar-simulation, .react-scrollbar-simulation * {
+  box-sizing: border-box;
+}

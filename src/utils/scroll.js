@@ -37,10 +37,10 @@ export const scrollbarWidth = _getScrollbarWidth();
 
 // // dom的宽度是否溢出
 // export function domWidthOverflow(dom) {
-//   return dom.scrollWidth - dom.clientWidth;
+//   return dom.scrollWidth > dom.clientWidth;
 // }
-
+//
 // // dom的高度是否溢出
 // export function domHeightOverflow(dom) {
-//   return dom.scrollHeight - dom.clientHeight;
+//   return dom.scrollHeight > dom.clientHeight;
 // }

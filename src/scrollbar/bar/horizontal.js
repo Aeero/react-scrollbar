@@ -17,11 +17,12 @@ class ScrollbarTrackHorizontal extends PureComponent {
       isHover,
       scrollbarWidth,
       scrollbarLeft,
-      setSlider
+      setSlider,
+      widthIsOverflow
     } = this.props;
 
     return (
-      <div className="react-scrollbar-simulation-track-horizontal">
+      <div className="react-scrollbar-simulation-track-horizontal" style={{display: widthIsOverflow ? '' : 'none'}}>
         <div
           ref={setSlider}
           className={classNameFormat({
@@ -42,7 +43,8 @@ ScrollbarTrackHorizontal.propTypes = {
   isHover: PropTypes.bool,
   scrollbarWidth: PropTypes.number.isRequired,
   scrollbarLeft: PropTypes.number.isRequired,
-  setSlider: PropTypes.func.isRequired
+  setSlider: PropTypes.func.isRequired,
+  widthIsOverflow: PropTypes.bool.isRequired
 }
 
 export default createTrack(ScrollbarTrackHorizontal, 'horizontal');

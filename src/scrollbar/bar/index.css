@@ -1,41 +1,49 @@
 .react-scrollbar-simulation-track-horizontal {
   position: absolute;
-  height: 6px;
+  height: 8px;
   width: 100%;
-  bottom: 2px;
+  padding: 1px 0;
+  bottom: 0px;
   left: 0;
+  background: rgba(222, 222, 222, 0.6);
+  transition: opacity 0.5s 0.5s ease-out;
 }
 
 .react-scrollbar-simulation-track-horizontal-slide {
-  height: 100%;
+  height: 6px;
   width: 40px;
   /* margin: 0 4px; */
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(50, 50, 50, 0.45);
   cursor: pointer;
   transition: background-color 0.2s;
+  border-radius: 3px;
 }
 
 .react-scrollbar-simulation-track-horizontal-slide-hover {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(50, 50, 50, 0.6);
 }
 
 .react-scrollbar-simulation-track-vertical {
   position: absolute;
-  width: 6px;
+  width: 8px;
   height: 100%;
+  padding: 0 1px;
   top: 0;
-  right: 2px;
+  right: 0px;
+  background: rgba(222, 222, 222, 0.6);
+  transition: opacity 0.5s 0.5s ease-out;
 }
 
 .react-scrollbar-simulation-track-vertical-slide {
-  width: 100%;
+  width: 6px;
   height: 40px;
   /* margin: 4px 0; */
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(50, 50, 50, 0.45);
   cursor: pointer;
   transition: background-color 0.2s;
+  border-radius: 3px;
 }
 
 .react-scrollbar-simulation-track-vertical-slide-hover {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(50, 50, 50, 0.6);
 }

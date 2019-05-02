@@ -27,6 +27,9 @@ module.exports = {
       }, {
         loader: 'css-loader'
       }]
+    }, {
+      test: /\.jpg$/,
+      use: 'file-loader'
     }]
   },
   plugins: [

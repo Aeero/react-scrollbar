@@ -17,11 +17,12 @@ class ScrollbarTrackVertical extends PureComponent {
       isHover,
       scrollbarHeight,
       scrollbarTop,
-      setSlider
+      setSlider,
+      heightIsOverflow
     } = this.props;
 
     return (
-      <div className="react-scrollbar-simulation-track-vertical">
+      <div className="react-scrollbar-simulation-track-vertical" style={{display: heightIsOverflow ? '' : 'none'}}>
         <div
           ref={setSlider}
           className={classNameFormat({
@@ -42,7 +43,8 @@ ScrollbarTrackVertical.propTypes = {
   isHover: PropTypes.bool,
   scrollbarHeight: PropTypes.number.isRequired,
   scrollbarTop: PropTypes.number.isRequired,
-  setSlider: PropTypes.func.isRequired
+  setSlider: PropTypes.func.isRequired,
+  heightIsOverflow: PropTypes.bool.isRequired
 }
 
 export default createTrack(ScrollbarTrackVertical, 'vertical');

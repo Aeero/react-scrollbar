@@ -14,51 +14,32 @@ class Scrollbar extends PureComponent {
   constructor() {
     super();
 
-    this.state = {
-      contentSize: {
-        clientWidth: 0,
-        scrollWidth: 0,
-        clientHeight: 0,
-        scrollHeight: 0
-      }
-    };
-
     this.scrollInterface = new ScrollInterface();
-
-    this.setContentSize = this.setContentSize.bind(this);
-  }
-
-  // 设置容器的实际宽高
-  setContentSize(size) {
-    this.setState({
-      contentSize: size
-    });
   }
 
   render() {
     const {
-      children
+      children,
+      style = {}
     } = this.props;
 
     const {
-      contentSize,
-      contentPosition
-    } = this.state;
+      width = '100%',
+      height = '100%',
+      ...otherStyle
+    } = style;
 
     return (
-      <div className="react-scrollbar-simulation" style={{width:'300px', height:'300px'}}>
+      <div className="react-scrollbar-simulation" style={{width, height, ...otherStyle}}>
         <ScrollbarContent
-          setContentSize={this.setContentSize}
           scrollInterface={this.scrollInterface}
         >
         {children}
         </ScrollbarContent>
         <ScrollbarTrackVertical
-          contentSize={contentSize}
           scrollInterface={this.scrollInterface}
         />
         <ScrollbarTrackHorizontal
-          contentSize={contentSize}
           scrollInterface={this.scrollInterface}
         />
       </div>
